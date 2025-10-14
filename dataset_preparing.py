@@ -4,6 +4,7 @@ from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 # import matplotlib.pyplot as plt
 import random
+import shutil
 
 PARAMS_HELIUM = np.unique(np.round(((np.trunc(np.geomspace(0.01, 0.3, 50)*1000) / 1000) + 0.000022), 6)).tolist()
 PARAMS_h2a = [1, 0]
@@ -101,6 +102,68 @@ def generate_samples_set(dataset: set[TargetParamsSample], num: int, xuv: int | 
             count+=1
             # print(sample)
     return res
+
+def update_parameters(input_file, output_file, new_values):
+    """
+    Обновляет числовые значения параметров в файле.
+
+    :param input_file: путь к исходному файлу
+    :param output_file: путь к обновлённому файлу (может совпадать с input_file)
+    :param new_values: словарь вида {'Параметр': новое_значение}
+    """
+    with open(input_file, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+
+    updated_lines = []
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith('#') or ' ' not in stripped:
+            # Пропускаем пустые строки, комментарии или строки без пробела
+            updated_lines.append(line)
+            continue
+
+        parts = stripped.split(maxsplit=1)
+        key = parts[0]
+        if key in new_values:
+            # Заменяем значение
+            new_val = new_values[key]
+            # Сохраняем формат: ключ и значение через пробел
+            updated_line = f"{key} {new_val}\n"
+            updated_lines.append(updated_line)
+        else:
+            updated_lines.append(line)
+
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.writelines(updated_lines)
+    
+    return output_file
+
+
+def generate_sample_folder(path_to_calculation_utils: Path, path_to_output_folder: Path, params: TargetParamsSample):
+    path_to_output_folder.mkdir(parents=True, exist_ok=True)
+
+    path_to_exo3d = path_to_calculation_utils / 'exo3d.exe'
+    path_to_grid = path_to_calculation_utils / 'gridPars.txt'
+    path_to_mpi = path_to_calculation_utils / 'mpi.bat'
+    path_to_probes = path_to_calculation_utils / 'probes.txt'
+    path_to_parameters = path_to_calculation_utils / 'parameters.txt'
+    
+    new_values = {
+        "XUVInt": params.xuv,
+        "H2a" : params.h2a,
+        "Helium": params.helium,
+        "Msw" : params.msw,
+        "Tmax": 400
+    }
+
+    path_to_parameters = update_parameters(path_to_parameters, path_to_output_folder / 'parameters.txt', new_values=new_values)
+
+    shutil.copy(path_to_exo3d, path_to_output_folder)
+    shutil.copy(path_to_grid, path_to_output_folder)
+    shutil.copy(path_to_mpi, path_to_output_folder)
+    shutil.copy(path_to_probes, path_to_output_folder)
+
+def generate_samples_from_set(path_to_output_folder:Path, samples_set: set):
 
 def generate_msw_list(exponenta) -> List:
     match exponenta:
