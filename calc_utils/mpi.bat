@@ -1,0 +1,1 @@
+mpiexec -n 44 exo3d
