@@ -153,7 +153,7 @@ def generate_sample_folder(path_to_calculation_utils: Path, path_to_output_folde
         "H2a" : params.h2a,
         "Helium": params.helium,
         "Msw" : params.msw,
-        "Tmax": 400
+        "Tmax": 250
     }
 
     path_to_parameters = update_parameters(path_to_parameters, path_to_output_folder / 'parameters.txt', new_values=new_values)
