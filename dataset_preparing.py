@@ -163,8 +163,17 @@ def generate_sample_folder(path_to_calculation_utils: Path, path_to_output_folde
     shutil.copy(path_to_mpi, path_to_output_folder)
     shutil.copy(path_to_probes, path_to_output_folder)
 
-def generate_samples_from_set(path_to_output_folder:Path, samples_set: set):
-
+def generate_samples_from_set(path_to_calculation_utils: Path, path_to_output_folder:Path, samples_set: set[TargetParamsSample]):
+    samples_list= list(samples_set)
+    for sample in samples_list:
+        output_folder_name = f"XUV{sample.xuv}Msw{sample.msw}He{str(sample.helium).replace('.', 'p')[:-2]}H{sample.h2a}"
+        path_to_output_folder_sample  = Path(path_to_output_folder) / Path(output_folder_name)
+        generate_sample_folder(
+            path_to_calculation_utils=Path(path_to_calculation_utils),
+            path_to_output_folder=Path(path_to_output_folder_sample),
+            params=sample
+        )
+        print(f"generated folder - {output_folder_name}")
 def generate_msw_list(exponenta) -> List:
     match exponenta:
 
