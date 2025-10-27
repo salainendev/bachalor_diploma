@@ -178,11 +178,11 @@ def generate_msw_list(exponenta) -> List:
     match exponenta:
 
         case 11:
-            mantisa = range(1,10)
+            mantisa = range(1,100)
         case 12:
             mantisa = range(1,100)
         case 13:
-            mantisa = range(1,100)
+            mantisa = range(1,6)
     
     return [f'{i}e{exponenta}' for i in mantisa]
 
