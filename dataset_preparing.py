@@ -153,7 +153,7 @@ def generate_sample_folder(path_to_calculation_utils: Path, path_to_output_folde
         "H2a" : params.h2a,
         "Helium": params.helium,
         "Msw" : params.msw,
-        "Tmax": 250
+        "Tmax": 120
     }
 
     path_to_parameters = update_parameters(path_to_parameters, path_to_output_folder / 'parameters.txt', new_values=new_values)
@@ -351,10 +351,10 @@ def display_experiment_info(experiments: List[ExperimentData]) -> None:
         print(f"  Rmax: {exp.parameters.rmax}")
         print(f"  Geometry: {exp.parameters.geometry}")
 
-def parse_experiments_data():
+def parse_experiments_data(root:str|Path):
     """Основная функция программы"""
     try:
-        root_input = Path('dataset')
+        root_input = Path(root)
         root_directory = Path(root_input).expanduser().resolve()
         
         experiments = find_and_parse_experiments(root_directory)
