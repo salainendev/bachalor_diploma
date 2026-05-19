@@ -1,0 +1,12 @@
+paths:
+  inference_weights_dir: "data/inference_ready_weights"
+
+models:
+  scaler_xuv: "scaler_xuv.pkl"
+  scaler_he: "scaler_he.pkl"
+  scaler_msw: "scaler_msw.pkl"
+  model_xuv: "best_xuv_transformer.pkl"
+  model_he: "best_helium_conv.pkl"
+  model_msw: "best_msw_transformer.pkl"
+  model_h2a: "best_h2a_conv.pkl"
+  model_scoring: "best_voigt_reconstructor_21.pkl"
